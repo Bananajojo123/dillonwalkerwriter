@@ -36,4 +36,10 @@ public class RssFeedModel {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void formatPost(){
+        this.description = description.replace("<p>","").replace("</p>", ". ").replace("&#8217;", "'").replace("[&#8230;]", "[click to read more]");
+        int ridofpos = description.indexOf("The post");
+        this.description = description.substring(0,ridofpos);
+    }
 }

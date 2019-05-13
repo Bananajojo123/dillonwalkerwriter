@@ -106,6 +106,8 @@ public class Blog extends AppCompatActivity {
                 if (title != null && link != null && description != null) {
                     if(isItem) {
                         RssFeedModel item = new RssFeedModel(title, link, description);
+                        // Get rid of weird RSS formatting
+                        item.formatPost();
                         items.add(item);
                     }
 
@@ -167,7 +169,15 @@ public class Blog extends AppCompatActivity {
                         .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                             @Override
                             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedModelList.get(position).getLink()));
+
+                                RssFeedModel rssFeedModel = feedModelList.get(position);
+                                Log.i(TAG, "title: " + rssFeedModel.getTitle());
+                                Log.i(TAG, "description: " + rssFeedModel.getDescription());
+                                Log.i(TAG, "link: " + rssFeedModel.getLink());
+
+
+                                // Go to the appropriate blog post
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(rssFeedModel.getLink()));
                                 startActivity(browserIntent);
                             }
                         });
