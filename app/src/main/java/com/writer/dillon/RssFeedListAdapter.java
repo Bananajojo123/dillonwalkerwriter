@@ -1,11 +1,15 @@
 package com.writer.dillon;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -16,19 +20,26 @@ import java.util.List;
 public class RssFeedListAdapter
         extends RecyclerView.Adapter<RssFeedListAdapter.FeedModelViewHolder> {
 
-    private List<RssFeedModel> mRssFeedModels;
+    private List<RssFeedModel> rssFeedModels;
 
-    public static class FeedModelViewHolder extends RecyclerView.ViewHolder {
+    public static class FeedModelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private View rssFeedView;
+        private static final String TAG = RssFeedListAdapter.class.getSimpleName();
 
         public FeedModelViewHolder(View v) {
             super(v);
             rssFeedView = v;
         }
+
+
+        @Override
+        public void onClick(View view) {
+            Log.i(TAG, "clicked");
+        }
     }
 
     public RssFeedListAdapter(List<RssFeedModel> rssFeedModels) {
-        mRssFeedModels = rssFeedModels;
+        this.rssFeedModels = rssFeedModels;
     }
 
     @Override
@@ -41,15 +52,19 @@ public class RssFeedListAdapter
 
     @Override
     public void onBindViewHolder(FeedModelViewHolder holder, int position) {
-        final RssFeedModel rssFeedModel = mRssFeedModels.get(position);
+        final RssFeedModel rssFeedModel = rssFeedModels.get(position);
         ((TextView)holder.rssFeedView.findViewById(R.id.titleText)).setText(rssFeedModel.title);
         ((TextView)holder.rssFeedView.findViewById(R.id.descriptionText)).setText(rssFeedModel.description);
         ((TextView)holder.rssFeedView.findViewById(R.id.linkText)).setText(rssFeedModel.link);
     }
 
+
+
     @Override
     public int getItemCount() {
-        return mRssFeedModels.size();
+        return rssFeedModels.size();
     }
+
+
 }
 

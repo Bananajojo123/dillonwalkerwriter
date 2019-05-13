@@ -1,5 +1,7 @@
 package com.writer.dillon;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,49 +24,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
 public class Blog extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "Blog";
 
-    private RecyclerView mRecyclerView;
-    private EditText mEditText;
-    private Button mFetchFeedButton;
-    private SwipeRefreshLayout mSwipeLayout;
-    private TextView mFeedTitleTextView;
-    private TextView mFeedLinkTextView;
-    private TextView mFeedDescriptionTextView;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeLayout;
 
-    private List<RssFeedModel> mFeedModelList;
-    private String mFeedTitle;
-    private String mFeedLink;
-    private String mFeedDescription;
+    private List<RssFeedModel> feedModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
 
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mEditText = findViewById(R.id.rssFeedEditText);
-        mFetchFeedButton = findViewById(R.id.fetchFeedButton);
-        mSwipeLayout = findViewById(R.id.swipeRefreshLayout);
-        mFeedTitleTextView = findViewById(R.id.feedTitle);
-        mFeedDescriptionTextView = findViewById(R.id.feedDescription);
-        mFeedLinkTextView = findViewById(R.id.feedLink);
+        recyclerView = findViewById(R.id.recyclerView);
+        swipeLayout = findViewById(R.id.swipeRefreshLayout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mFetchFeedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new FetchFeedTask().execute((Void) null);
-            }
-        });
-        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        new FetchFeedTask().execute((Void) null);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new FetchFeedTask().execute((Void) null);
@@ -126,11 +108,6 @@ public class Blog extends AppCompatActivity {
                         RssFeedModel item = new RssFeedModel(title, link, description);
                         items.add(item);
                     }
-                    else {
-                        mFeedTitle = title;
-                        mFeedLink = link;
-                        mFeedDescription = description;
-                    }
 
                     title = null;
                     link = null;
@@ -151,14 +128,9 @@ public class Blog extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            mSwipeLayout.setRefreshing(true);
-            mFeedTitle = null;
-            mFeedLink = null;
-            mFeedDescription = null;
-            mFeedTitleTextView.setText("Feed Title: " + mFeedTitle);
-            mFeedDescriptionTextView.setText("Feed Description: " + mFeedDescription);
-            mFeedLinkTextView.setText("Feed Link: " + mFeedLink);
-            urlLink = mEditText.getText().toString();
+            swipeLayout.setRefreshing(true);
+
+            urlLink = "https://dillonwalkerwriter.com/index.php/feed/";
         }
 
         @Override
@@ -172,7 +144,7 @@ public class Blog extends AppCompatActivity {
 
                 URL url = new URL(urlLink);
                 InputStream inputStream = url.openConnection().getInputStream();
-                mFeedModelList = parseFeed(inputStream);
+                feedModelList = parseFeed(inputStream);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
@@ -184,14 +156,21 @@ public class Blog extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            mSwipeLayout.setRefreshing(false);
+            swipeLayout.setRefreshing(false);
 
             if (success) {
-                mFeedTitleTextView.setText("Feed Title: " + mFeedTitle);
-                mFeedDescriptionTextView.setText("Feed Description: " + mFeedDescription);
-                mFeedLinkTextView.setText("Feed Link: " + mFeedLink);
                 // Fill RecyclerView
-                mRecyclerView.setAdapter(new RssFeedListAdapter(mFeedModelList));
+                recyclerView.setAdapter(new RssFeedListAdapter(feedModelList));
+
+                // On Click Listener For Blog Posts
+                ItemClickSupport.addTo(recyclerView)
+                        .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                            @Override
+                            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedModelList.get(position).getLink()));
+                                startActivity(browserIntent);
+                            }
+                        });
             } else {
                 Toast.makeText(Blog.this,
                         "Enter a valid Rss feed url",
