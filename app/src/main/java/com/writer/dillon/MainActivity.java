@@ -1,5 +1,6 @@
 package com.writer.dillon;
 
+import android.content.Intent;
 import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,8 +29,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(view.getContext(), Blog.class);
+                startActivity(i);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_blog) {
+
 
         } else if (id == R.id.nav_admin_settings) {
 
