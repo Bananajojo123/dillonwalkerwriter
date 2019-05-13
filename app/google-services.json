@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "202773490647",
+    "firebase_url": "https://dillonwalkerwriter.firebaseio.com",
+    "project_id": "dillonwalkerwriter",
+    "storage_bucket": "dillonwalkerwriter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202773490647:android:8b8ffa35fd14d2f9",
+        "android_client_info": {
+          "package_name": "com.writer.dillon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202773490647-jb046itv34c0a0v3k2ae1v2ib0igt2hp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.writer.dillon",
+            "certificate_hash": "aff926bf312736bffeb17dfb236bf6f7dda5bc0e"
+          }
+        },
+        {
+          "client_id": "202773490647-n2g4jn0lk5mfotr86ejbq922pr44vfd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDLg7_tKSQAX0wY-rCQqErQgBFfePSmTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202773490647-n2g4jn0lk5mfotr86ejbq922pr44vfd4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
