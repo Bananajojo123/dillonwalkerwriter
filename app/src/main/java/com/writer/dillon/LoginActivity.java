@@ -17,6 +17,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.push.DeviceRegistrationResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -26,6 +27,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class LoginActivity extends Activity implements GoogleApiClient.OnConnectionFailedListener {
@@ -252,7 +256,21 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         Backendless.UserService.login(emailaddress, password, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
+                List<String> channels = new ArrayList<String>();
+                channels.add( "default" );
+                Backendless.Messaging.registerDevice(channels, new AsyncCallback<DeviceRegistrationResult>() {
+                    @Override
+                    public void handleResponse(DeviceRegistrationResult response) {
+//                        Toast.makeText( context, "Device registered!",
+//                                Toast.LENGTH_LONG).show();
+                    }
 
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+//                        Toast.makeText( context, "Error registering " + fault.getMessage(),
+//                                Toast.LENGTH_LONG).show();
+                    }
+                });
                 pDialogLogin.dismiss();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
