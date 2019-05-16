@@ -206,6 +206,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
             user.setPassword(password);
             user.setProperty("name", name);
             user.setProperty("profileurl", photourl);
+            user.setProperty("notifications", true);
 
             Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                 @Override

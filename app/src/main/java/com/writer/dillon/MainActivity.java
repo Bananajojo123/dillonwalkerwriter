@@ -1,5 +1,6 @@
 package com.writer.dillon;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -27,6 +31,8 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private String TAG = this.getClass().getSimpleName();
+    Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +40,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = getApplicationContext();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(view.getContext(), ShowBlog.class);
-                startActivity(i);
+//                Intent i = new Intent(view.getContext(), ShowBlog.class);
+//                startActivity(i);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -71,15 +78,26 @@ public class MainActivity extends AppCompatActivity
 
 
 
+        toolbar.setOnMenuItemClickListener(
+                new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_settings:
+                                Intent i = new Intent(context, Settings.class);
+                                startActivity(i);
+                                break;
 
-
-
-
+                            default:
+                                break;
+                        }
+                    return true;
+                    }
+                });
 
 //        getSupportFragmentManager().beginTransaction()
 //                .add(R.id.content_frame, fragment).commit();
     }
-
 
 
     @Override
@@ -118,17 +136,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+        Fragment contentFragment = null;
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            contentFragment = new WelcomeFragment();
         } else if (id == R.id.nav_blog) {
-
+            contentFragment = new BlogFragment();
 
         } else if (id == R.id.nav_admin_settings) {
 
         }
-
+        if(contentFragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction().addToBackStack(null);
+            ft.replace(R.id.content_frame, contentFragment);
+            ft.commit();
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

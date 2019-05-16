@@ -1,18 +1,27 @@
 package com.writer.dillon;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -24,23 +33,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ShowBlog extends AppCompatActivity {
-
-    private static final String TAG = "ShowBlog";
+public class BlogFragment extends Fragment {
+    private List<Blog> feedModelList;
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeLayout;
 
-    private List<Blog> feedModelList;
+    public BlogFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blog);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_blog, container, false);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        swipeLayout = findViewById(R.id.swipeRefreshLayout);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = view.findViewById(R.id.recyclerView);
+        swipeLayout = view.findViewById(R.id.swipeRefreshLayout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         new FetchFeedTask().execute((Void) null);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -49,7 +60,9 @@ public class ShowBlog extends AppCompatActivity {
                 new FetchFeedTask().execute((Void) null);
             }
         });
+        return view;
     }
+
 
     public List<Blog> parseFeed(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
@@ -146,9 +159,8 @@ public class ShowBlog extends AppCompatActivity {
                 feedModelList = parseFeed(inputStream);
                 return true;
             } catch (IOException e) {
-                Log.e(TAG, "Error", e);
+
             } catch (XmlPullParserException e) {
-                Log.e(TAG, "Error", e);
             }
             return false;
         }
@@ -168,9 +180,6 @@ public class ShowBlog extends AppCompatActivity {
                             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
                                 Blog blog = feedModelList.get(position);
-                                Log.i(TAG, "title: " + blog.getTitle());
-                                Log.i(TAG, "description: " + blog.getDescription());
-                                Log.i(TAG, "link: " + blog.getLink());
 
 
                                 // Go to the appropriate blog post
@@ -178,10 +187,6 @@ public class ShowBlog extends AppCompatActivity {
                                 startActivity(browserIntent);
                             }
                         });
-            } else {
-                Toast.makeText(ShowBlog.this,
-                        "Enter a valid Rss feed url",
-                        Toast.LENGTH_LONG).show();
             }
         }
     }
