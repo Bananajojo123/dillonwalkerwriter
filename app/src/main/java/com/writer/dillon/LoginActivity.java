@@ -45,7 +45,6 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     private String TAG = this.getClass().getSimpleName();
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signinbutton;
-    private boolean hasAccount = false;
     Context context;
     private boolean signingInWithGoogle = false;
 
@@ -263,6 +262,9 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                     public void handleResponse(DeviceRegistrationResult response) {
 //                        Toast.makeText( context, "Device registered!",
 //                                Toast.LENGTH_LONG).show();
+
+
+
                     }
 
                     @Override
