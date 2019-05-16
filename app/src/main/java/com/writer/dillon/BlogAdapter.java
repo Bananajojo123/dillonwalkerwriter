@@ -1,15 +1,11 @@
 package com.writer.dillon;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -17,14 +13,14 @@ import java.util.List;
  * Created by obaro on 27/11/2016.
  */
 
-public class RssFeedListAdapter
-        extends RecyclerView.Adapter<RssFeedListAdapter.FeedModelViewHolder> {
+public class BlogAdapter
+        extends RecyclerView.Adapter<BlogAdapter.FeedModelViewHolder> {
 
-    private List<RssFeedModel> rssFeedModels;
+    private List<Blog> blogs;
 
     public static class FeedModelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private View rssFeedView;
-        private static final String TAG = RssFeedListAdapter.class.getSimpleName();
+        private static final String TAG = BlogAdapter.class.getSimpleName();
 
         public FeedModelViewHolder(View v) {
             super(v);
@@ -38,8 +34,8 @@ public class RssFeedListAdapter
         }
     }
 
-    public RssFeedListAdapter(List<RssFeedModel> rssFeedModels) {
-        this.rssFeedModels = rssFeedModels;
+    public BlogAdapter(List<Blog> blogs) {
+        this.blogs = blogs;
     }
 
     @Override
@@ -52,17 +48,17 @@ public class RssFeedListAdapter
 
     @Override
     public void onBindViewHolder(FeedModelViewHolder holder, int position) {
-        final RssFeedModel rssFeedModel = rssFeedModels.get(position);
-        ((TextView)holder.rssFeedView.findViewById(R.id.titleText)).setText(rssFeedModel.title);
-        ((TextView)holder.rssFeedView.findViewById(R.id.descriptionText)).setText(rssFeedModel.description);
-        ((TextView)holder.rssFeedView.findViewById(R.id.linkText)).setText(rssFeedModel.link);
+        final Blog blog = blogs.get(position);
+        ((TextView)holder.rssFeedView.findViewById(R.id.titleText)).setText(blog.title);
+        ((TextView)holder.rssFeedView.findViewById(R.id.descriptionText)).setText(blog.description);
+        ((TextView)holder.rssFeedView.findViewById(R.id.linkText)).setText(blog.link);
     }
 
 
 
     @Override
     public int getItemCount() {
-        return rssFeedModels.size();
+        return blogs.size();
     }
 
 

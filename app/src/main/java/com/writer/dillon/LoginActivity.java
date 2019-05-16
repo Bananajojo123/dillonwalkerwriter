@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -107,7 +106,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     private class SignUpOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View V){
-            signUp(email.getText().toString(), uname.getText().toString(),upassword.getText().toString(),upasswordConfirm.getText().toString());
+            signUp(email.getText().toString(), uname.getText().toString(),upassword.getText().toString(),upasswordConfirm.getText().toString(), "");
         }
     }
     private class LoginOnClickListener implements View.OnClickListener{
@@ -149,7 +148,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            signUp(account.getEmail(),account.getGivenName(),account.getId(),account.getId());
+            signUp(account.getEmail(),account.getGivenName(),account.getId(),account.getId(),account.getPhotoUrl().toString());
             signingInWithGoogle = true;
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -162,7 +161,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
 
     }
 
-    public String signUp(String uemail, String uname, String upassword, String uconfirmPassword){
+    public String signUp(String uemail, String uname, String upassword, String uconfirmPassword, String photourl){
         String message = "";
         final String emailaddress = uemail;
         String name = uname;
@@ -203,6 +202,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
             user.setEmail(emailaddress);
             user.setPassword(password);
             user.setProperty("name", name);
+            user.setProperty("profileurl", photourl);
 
             Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                 @Override
@@ -252,6 +252,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         Backendless.UserService.login(emailaddress, password, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
+
                 pDialogLogin.dismiss();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
