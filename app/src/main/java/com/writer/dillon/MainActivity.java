@@ -59,20 +59,27 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Backendless User
-        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-        String useremail = currentUser.getEmail();
-        String username = currentUser.getProperty("name").toString();
-        String photourl = currentUser.getProperty("profileurl").toString();
+        // Show Welcome Fragment
+        Fragment fragment = new WelcomeFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content_frame, fragment).commit();
 
-        // Nav Header (Pic, name, email)
-        ImageView profilepic = navHeaderView.findViewById(R.id.navigation_picture);
-        TextView tvHeaderName= navHeaderView.findViewById(R.id.navigation_name);
-        TextView tvHeaderEmail= navHeaderView.findViewById(R.id.navigation_email);
-        tvHeaderName.setText(username);
-        tvHeaderEmail.setText(useremail);
-        new DownloadImageTask(profilepic)
-                .execute(photourl);
+        // Backendless User
+        if (Backendless.UserService.CurrentUser() != null) {
+            BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+            String useremail = currentUser.getEmail();
+            String username = currentUser.getProperty("name").toString();
+            String photourl = currentUser.getProperty("profileurl").toString();
+
+            // Nav Header (Pic, name, email)
+            ImageView profilepic = navHeaderView.findViewById(R.id.navigation_picture);
+            TextView tvHeaderName = navHeaderView.findViewById(R.id.navigation_name);
+            TextView tvHeaderEmail = navHeaderView.findViewById(R.id.navigation_email);
+            tvHeaderName.setText(username);
+            tvHeaderEmail.setText(useremail);
+            new DownloadImageTask(profilepic)
+                    .execute(photourl);
+        }
 
 
 

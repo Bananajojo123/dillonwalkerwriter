@@ -59,6 +59,12 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         context = getApplicationContext();
 
         setContentView(R.layout.activity_login);
+
+        if (Backendless.UserService.CurrentUser() != null) {
+            Intent i = new Intent(context, MainActivity.class);
+            startActivity(i);
+        }
+
         email = findViewById(R.id.enter_email);
         upassword = findViewById(R.id.enter_password);
         upasswordConfirm = findViewById(R.id.re_enter_password);
@@ -291,7 +297,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                     startActivity(intent);
                 }
             }
-        });
+        }, true);
 
         return(message);
     }
