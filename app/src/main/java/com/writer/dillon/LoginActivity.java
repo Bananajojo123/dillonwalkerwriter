@@ -214,6 +214,13 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
             user.setProperty("profileurl", photourl);
             user.setProperty("notifications", true);
 
+            if(signingInWithGoogle){
+                user.setProperty("googlesignin", true);
+            }
+            else{
+                user.setProperty("googlesignin",false);
+            }
+
             Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                 @Override
                 public void handleResponse(BackendlessUser response) {
@@ -290,14 +297,14 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                 pDialogLogin.dismiss();
                 if(fault.getCode().equals("3087")){
                     warnUser(getString(R.string.backendless_verify), getString(R.string.backendless_verify_your_email));
+                    Log.i(TAG, fault.toString());
                 }
                 else {
                     warnUser(getString(R.string.backendless_error_title), getString(R.string.backendless_error));
-                    Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                    startActivity(intent);
+
                 }
             }
-        }, true);
+        });
 
         return(message);
     }

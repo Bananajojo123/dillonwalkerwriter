@@ -1,10 +1,10 @@
 package com.writer.dillon;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -35,7 +35,7 @@ public class Settings extends AppCompatActivity {
         resetPass = findViewById(R.id.reset_pass);
         final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
         Boolean notificationsEnabled = (Boolean) currentUser.getProperty("notifications");
-
+        //Backendless.initApp(context, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
         if(notificationsEnabled){
             switchNotification.setChecked(true);
         }
@@ -43,26 +43,32 @@ public class Settings extends AppCompatActivity {
             switchNotification.setChecked(false);
         }
 
-
         resetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+                String id = currentUser.getEmail();
+                Boolean signingoogle = (Boolean) currentUser.getProperty("googlesignin");
+                if(!signingoogle) {
 
+                    Backendless.UserService.restorePassword(id, new AsyncCallback<Void>() {
+                        public void handleResponse(Void response) {
+                            Toast.makeText(view.getContext(), "Email Sent!", Toast.LENGTH_LONG).show();
+                            Intent i2 = new Intent(view.getContext(), LoginActivity.class);
+                            startActivity(i2);
+                        }
 
-                Backendless.UserService.restorePassword(Backendless.UserService.loggedInUser() , new AsyncCallback<Void>()
-                {
-                    public void handleResponse( Void response )
-                    {
-                        Toast.makeText(view.getContext(), getString(R.string.reset_password_email), Toast.LENGTH_LONG);
-                        Intent i = new Intent(view.getContext(), LoginActivity.class);
-                        startActivity(i);
-                    }
+                        public void handleFault(BackendlessFault fault) {
 
-                    public void handleFault( BackendlessFault fault )
-                    {
-                        Toast.makeText(view.getContext(), getString(R.string.backendless_error), Toast.LENGTH_LONG);
-                    }
-                });
+                            Log.i("Settings", fault.toString());
+                            Toast.makeText(view.getContext(), getString(R.string.backendless_error) + " Error: " + fault.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+                else {
+                    Toast.makeText(context, getString(R.string.cantresetgoogleaccount), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -98,7 +104,7 @@ public class Settings extends AppCompatActivity {
                 if(!switchNotification.isChecked()){
                     Backendless.Messaging.unregisterDevice();
                     Toast.makeText( context, "Notifications Off!",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                     currentUser.setProperty("notifications", false);
                 }
                 else {
@@ -106,7 +112,7 @@ public class Settings extends AppCompatActivity {
                         @Override
                         public void handleResponse(DeviceRegistrationResult response) {
                         Toast.makeText( context, "Notifications On!",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                             currentUser.setProperty("notifications", true);
 
 

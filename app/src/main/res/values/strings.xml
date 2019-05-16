@@ -75,11 +75,10 @@
         <item>Movie</item>
     </array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reset_password">Reset Password</string>
     <string name="reset_password_email">Email Sent!</string>
     <string name="logout">Log Out</string>
     <string name="logged_out">Logged Out!</string>
     <string name="logged_out_error">Error Logging Out!</string>
+    <string name="cantresetgoogleaccount">Can\'t reset password for a Google Account</string>
 </resources>
