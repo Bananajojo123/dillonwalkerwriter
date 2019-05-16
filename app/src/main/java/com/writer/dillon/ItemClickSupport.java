@@ -28,7 +28,7 @@ public class ItemClickSupport {
             return false;
         }
     };
-    private RecyclerView.OnChildAttachStateChangeListener mAttachListener
+    private RecyclerView.OnChildAttachStateChangeListener attachListener
             = new RecyclerView.OnChildAttachStateChangeListener() {
         @Override
         public void onChildViewAttachedToWindow(View view) {
@@ -53,7 +53,7 @@ public class ItemClickSupport {
         // replacing the ItemClickSupport without removing
         // the old one from the RecyclerView
         this.recyclerView.setTag(R.id.item_click_support, this);
-        this.recyclerView.addOnChildAttachStateChangeListener(mAttachListener);
+        this.recyclerView.addOnChildAttachStateChangeListener(attachListener);
     }
 
     public static ItemClickSupport addTo(RecyclerView view) {
@@ -85,7 +85,7 @@ public class ItemClickSupport {
     }
 
     private void detach(RecyclerView view) {
-        view.removeOnChildAttachStateChangeListener(mAttachListener);
+        view.removeOnChildAttachStateChangeListener(attachListener);
         view.setTag(R.id.item_click_support, null);
     }
 
