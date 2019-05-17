@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     private SignInButton signinbutton;
     Context context;
     private boolean signingInWithGoogle = false;
+    private String objectId;
 
 
 
@@ -220,6 +222,11 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
             else{
                 user.setProperty("googlesignin",false);
             }
+
+
+            User usertosave = new User(emailaddress);
+
+
 
             Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                 @Override
