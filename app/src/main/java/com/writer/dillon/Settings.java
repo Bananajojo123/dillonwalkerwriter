@@ -3,6 +3,7 @@ package com.writer.dillon;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,8 @@ public class Settings extends AppCompatActivity {
     Switch switchNotification;
     Button resetPass;
     Button logout;
-
+    Button delaccount;
+    private String TAG = this.getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,7 @@ public class Settings extends AppCompatActivity {
         switchNotification = findViewById(R.id.notification_switch);
         logout = findViewById(R.id.button_logout);
         resetPass = findViewById(R.id.reset_pass);
+        delaccount = findViewById(R.id.button_delete_account);
         final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
         Boolean notificationsEnabled = (Boolean) currentUser.getProperty("notifications");
         //Backendless.initApp(context, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
@@ -42,6 +45,16 @@ public class Settings extends AppCompatActivity {
         else {
             switchNotification.setChecked(false);
         }
+
+
+        delaccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDelete();
+            }
+
+        });
+
 
         resetPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,5 +144,8 @@ public class Settings extends AppCompatActivity {
     }
 
 
-
+    public void confirmDelete() {
+        DialogFragment newFragment = new DeleteAccountFragment();
+        newFragment.show(getSupportFragmentManager(), "del account");
+    }
 }

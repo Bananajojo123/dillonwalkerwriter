@@ -75,10 +75,16 @@
         <item>Movie</item>
     </array>
 
-    <string name="reset_password">Reset Password</string>
+    <string name="reset_password">Reset Password Via Email</string>
     <string name="reset_password_email">Email Sent!</string>
     <string name="logout">Log Out</string>
     <string name="logged_out">Logged Out!</string>
     <string name="logged_out_error">Error Logging Out!</string>
     <string name="cantresetgoogleaccount">Can\'t reset password for a Google Account</string>
+
+    <string name="delete_account">Delete Account</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_delete_account">Delete Account?</string>
+    <string name="delete_account_message">Are You Sure? This Action cannot be undone!</string>
+
 </resources>
