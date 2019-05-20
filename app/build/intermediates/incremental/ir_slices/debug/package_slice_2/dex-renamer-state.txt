@@ -1,0 +1,4 @@
+#Thu May 16 14:39:06 MDT 2019
+base.0=C\:\\Users\\21sanaar.MCPS\\Documents\\GitHub\\dillonwalkerwriter\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\2
+path.0=classes.dex
+renamed.0=classes.dex

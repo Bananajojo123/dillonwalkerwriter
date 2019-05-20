@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.daandtu:android-web-scraper:1.0.1@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f073464520f9f6869623b5e8bc2b6730/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f073464520f9f6869623b5e8bc2b6730/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.daandtu/android-web-scraper/1.0.1/22ca07faea495e5538361f2894339a18c839a362/android-web-scraper-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
