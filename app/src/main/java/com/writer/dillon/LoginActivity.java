@@ -5,9 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,11 +56,11 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Backendless.initApp(this, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
         context = getApplicationContext();
 
         setContentView(R.layout.activity_login);
-
+        Backendless.setUrl( "http://api.backendless.com" );
+        Backendless.initApp(this, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
         if (Backendless.UserService.CurrentUser() != null) {
             Intent i = new Intent(context, MainActivity.class);
             startActivity(i);
@@ -307,6 +306,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                     Log.i(TAG, fault.toString());
                 }
                 else {
+                    Log.i(TAG, fault.toString());
                     warnUser(getString(R.string.backendless_error_title), getString(R.string.backendless_error));
 
                 }
