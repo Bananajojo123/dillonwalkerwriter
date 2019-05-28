@@ -12,10 +12,14 @@
             android:id="@+id/nav_blog"
             android:icon="@drawable/ic_blog"
             android:title="@string/title_blog_fragment" />
+        <!--<item-->
+            <!--android:id="@+id/nav_admin_settings"-->
+            <!--android:icon="@drawable/ic_security_black_24dp"-->
+            <!--android:title="@string/title_admin_sttings_fragment" />-->
         <item
-            android:id="@+id/nav_admin_settings"
-            android:icon="@drawable/ic_security_black_24dp"
-            android:title="@string/title_admin_sttings_fragment" />
+            android:id="@+id/nav_library"
+            android:icon="@drawable/ic_collections_bookmark_black_24dp"
+            android:title="@string/library" />
     </group>
 
 </menu>

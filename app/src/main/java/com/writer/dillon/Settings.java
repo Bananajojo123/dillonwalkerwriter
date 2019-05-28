@@ -3,11 +3,12 @@ package com.writer.dillon;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.push.DeviceRegistrationResult;
+import com.folioreader.FolioReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,26 @@ public class Settings extends AppCompatActivity {
     Button resetPass;
     Button logout;
     Button delaccount;
+
+
+    // Report Problem
+    EditText reportProblemEmail;
+    EditText reportProblemMessage;
+    Button reportProblemSubmit;
+    Button reportProblemShow;
+    Boolean hidden = true;
+
+    // Book testing
+    Button book_launch;
+
     private String TAG = this.getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        book_launch = findViewById(R.id.launch_book);
+
         context = getApplicationContext();
         switchNotification = findViewById(R.id.notification_switch);
         logout = findViewById(R.id.button_logout);
@@ -45,6 +62,16 @@ public class Settings extends AppCompatActivity {
         else {
             switchNotification.setChecked(false);
         }
+
+        // Report Problems
+        reportProblemEmail = findViewById(R.id.report_email);
+        reportProblemMessage = findViewById(R.id.report_message);
+        reportProblemSubmit = findViewById(R.id.send_report_email_button);
+        reportProblemShow = findViewById(R.id.report_problem);
+
+        reportProblemEmail.setVisibility(View.GONE);
+        reportProblemMessage.setVisibility(View.GONE);
+        reportProblemSubmit.setVisibility(View.GONE);
 
 
         delaccount.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +166,33 @@ public class Settings extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        reportProblemShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(hidden) {
+                    reportProblemEmail.setVisibility(View.VISIBLE);
+                    reportProblemMessage.setVisibility(View.VISIBLE);
+                    reportProblemSubmit.setVisibility(View.VISIBLE);
+                    hidden = false;
+                }
+                else {
+                    reportProblemEmail.setVisibility(View.GONE);
+                    reportProblemMessage.setVisibility(View.GONE);
+                    reportProblemSubmit.setVisibility(View.GONE);
+                    hidden = true;
+                }
+            }
+        });
+
+
+        book_launch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FolioReader folioReader = FolioReader.get();
+                folioReader.openBook(R.raw.suns);
             }
         });
     }

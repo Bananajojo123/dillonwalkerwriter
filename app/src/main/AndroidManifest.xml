@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShowBooks"></activity>
         <activity android:name=".Settings" />
         <activity
             android:name=".LoginActivity"
@@ -30,7 +29,6 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <service
             android:name="com.backendless.push.BackendlessFCMService"
             android:enabled="true">
