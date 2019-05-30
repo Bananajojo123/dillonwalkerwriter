@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import android.util.Log;
@@ -48,7 +49,13 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     Context context;
     private boolean signingInWithGoogle = false;
     private String objectId;
+    BackendlessUser currentUser;
 
+    SharedPreferences pref; // 0 - for private mode
+    SharedPreferences.Editor editor;
+
+    public LoginActivity() {
+    }
 
 
 
@@ -59,6 +66,14 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         context = getApplicationContext();
 
         setContentView(R.layout.activity_login);
+
+        pref = getApplicationContext().getSharedPreferences("login", 0);
+        currentUser=Backendless.UserService.CurrentUser();
+
+        if(pref.getString("email", null) != null && pref.getString("password", null) != null){
+            login(pref.getString("email", null), pref.getString("password", null));
+        }
+
         Backendless.setUrl( "http://api.backendless.com" );
         Backendless.initApp(this, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
         if (Backendless.UserService.CurrentUser() != null) {
@@ -223,9 +238,6 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
             }
 
 
-            User usertosave = new User(emailaddress);
-
-
 
             Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                 @Override
@@ -266,7 +278,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     public String login(final String uemail, final String upassword){
         String message = "";
         String emailaddress = uemail;
-        String password = upassword;
+        final String password = upassword;
         final ProgressDialog pDialogLogin = ProgressDialog.show(LoginActivity.this,
                 getString(R.string.progress_title),
                 getString(R.string.progress_logging_in),
@@ -293,6 +305,15 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
 //                                Toast.LENGTH_LONG).show();
                     }
                 });
+
+                pref = getApplicationContext().getSharedPreferences("login", 0);
+                editor = pref.edit();
+                currentUser=Backendless.UserService.CurrentUser();
+                editor.putString("email", currentUser.getEmail());
+                editor.putString("password", password);
+                editor.apply();
+
+
                 pDialogLogin.dismiss();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);

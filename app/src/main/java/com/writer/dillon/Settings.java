@@ -2,6 +2,8 @@ package com.writer.dillon;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,24 +38,25 @@ public class Settings extends AppCompatActivity {
     Button reportProblemSubmit;
     Button reportProblemShow;
     Boolean hidden = true;
-
+    SharedPreferences pref; // 0 - for private mode
     // Book testing
     Button book_launch;
-
+    BackendlessUser user;
     private String TAG = this.getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        book_launch = findViewById(R.id.launch_book);
+        pref = getApplicationContext().getSharedPreferences("login", 0);
 
+        final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+        book_launch = findViewById(R.id.launch_book);
         context = getApplicationContext();
         switchNotification = findViewById(R.id.notification_switch);
         logout = findViewById(R.id.button_logout);
         resetPass = findViewById(R.id.reset_pass);
         delaccount = findViewById(R.id.button_delete_account);
-        final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
         Boolean notificationsEnabled = (Boolean) currentUser.getProperty("notifications");
         //Backendless.initApp(context, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
         if(notificationsEnabled){
@@ -72,7 +75,7 @@ public class Settings extends AppCompatActivity {
         reportProblemEmail.setVisibility(View.GONE);
         reportProblemMessage.setVisibility(View.GONE);
         reportProblemSubmit.setVisibility(View.GONE);
-
+        reportProblemEmail.setText(currentUser.getEmail());
 
         delaccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +89,7 @@ public class Settings extends AppCompatActivity {
         resetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+
                 String id = currentUser.getEmail();
                 Boolean signingoogle = (Boolean) currentUser.getProperty("googlesignin");
                 if(!signingoogle) {
@@ -187,6 +190,17 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        reportProblemSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","aaron.santacruz03@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "App Error From " + currentUser.getEmail());
+                emailIntent.putExtra(Intent.EXTRA_TEXT, reportProblemMessage.getText());
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            }
+        });
+
 
         book_launch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,4 +216,6 @@ public class Settings extends AppCompatActivity {
         DialogFragment newFragment = new DeleteAccountFragment();
         newFragment.show(getSupportFragmentManager(), "del account");
     }
+
+
 }
