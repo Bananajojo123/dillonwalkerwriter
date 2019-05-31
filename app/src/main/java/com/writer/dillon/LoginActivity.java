@@ -70,7 +70,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         pref = getApplicationContext().getSharedPreferences("login", 0);
         currentUser=Backendless.UserService.CurrentUser();
 
-        if(pref.getString("email", null) != null && pref.getString("password", null) != null){
+        if(pref.getString("email", null) != null && pref.getString("password", null) != null && pref.getBoolean("enabled", true)){
             login(pref.getString("email", null), pref.getString("password", null));
         }
 
