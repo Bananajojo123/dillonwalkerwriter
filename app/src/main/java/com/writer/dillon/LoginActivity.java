@@ -44,7 +44,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     private TextView signUpText;
     private String screen = "Login";
     private String TAG = this.getClass().getSimpleName();
-    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient googleSignInClient;
     private SignInButton signinbutton;
     Context context;
     private boolean signingInWithGoogle = false;
@@ -93,7 +93,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                 .build();
         signinbutton = findViewById(R.id.gplus_login);
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         signUpText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +151,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     }
 
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     @Override

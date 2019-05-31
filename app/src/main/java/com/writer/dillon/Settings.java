@@ -31,6 +31,9 @@ public class Settings extends AppCompatActivity {
     Button logout;
     Button delaccount;
 
+    // Turn off auto sign in
+    SharedPreferences pref; // 0 - for private mode
+    SharedPreferences.Editor editor;
 
     // Report Problem
     EditText reportProblemEmail;
@@ -38,19 +41,25 @@ public class Settings extends AppCompatActivity {
     Button reportProblemSubmit;
     Button reportProblemShow;
     Boolean hidden = true;
-    SharedPreferences pref; // 0 - for private mode
+
     // Book testing
     Button book_launch;
     BackendlessUser user;
+
+    // Auto Login
+    Switch autologin;
+
     private String TAG = this.getClass().getSimpleName();
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        pref = getApplicationContext().getSharedPreferences("login", 0);
+
+
 
         final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+
         book_launch = findViewById(R.id.launch_book);
         context = getApplicationContext();
         switchNotification = findViewById(R.id.notification_switch);
@@ -58,13 +67,7 @@ public class Settings extends AppCompatActivity {
         resetPass = findViewById(R.id.reset_pass);
         delaccount = findViewById(R.id.button_delete_account);
         Boolean notificationsEnabled = (Boolean) currentUser.getProperty("notifications");
-        //Backendless.initApp(context, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
-        if(notificationsEnabled){
-            switchNotification.setChecked(true);
-        }
-        else {
-            switchNotification.setChecked(false);
-        }
+        switchNotification.setChecked(notificationsEnabled);
 
         // Report Problems
         reportProblemEmail = findViewById(R.id.report_email);
@@ -77,12 +80,37 @@ public class Settings extends AppCompatActivity {
         reportProblemSubmit.setVisibility(View.GONE);
         reportProblemEmail.setText(currentUser.getEmail());
 
+        // auto sign in
+        pref = getApplicationContext().getSharedPreferences("login", 0);
+        editor = pref.edit();
+        autologin = findViewById(R.id.autologin);
+
         delaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmDelete();
             }
 
+        });
+
+        autologin.setChecked(pref.getBoolean("enabled", true));
+
+        autologin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!autologin.isChecked()){
+                    editor.putBoolean("enabled", false);
+                    editor.apply();
+                    Toast.makeText( context, "Auto Login Disabled!",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    editor.putBoolean("enabled", true);
+                    editor.apply();
+                    Toast.makeText( context, "Auto Login Enabled!",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
 
@@ -122,6 +150,10 @@ public class Settings extends AppCompatActivity {
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     @Override
                     public void handleResponse(Void response) {
+                        editor.putBoolean("enabled", false);
+                        editor.putString("email", null);
+                        editor.putString("password", null);
+                        editor.apply();
                         Toast.makeText( context, getString(R.string.logged_out),
                                 Toast.LENGTH_LONG).show();
                         Intent i = new Intent(context, LoginActivity.class);
@@ -154,7 +186,7 @@ public class Settings extends AppCompatActivity {
                     Backendless.Messaging.registerDevice(channels, new AsyncCallback<DeviceRegistrationResult>() {
                         @Override
                         public void handleResponse(DeviceRegistrationResult response) {
-                        Toast.makeText( context, "Notifications On!",
+                            Toast.makeText( context, "Notifications On!",
                                 Toast.LENGTH_SHORT).show();
                             currentUser.setProperty("notifications", true);
 
