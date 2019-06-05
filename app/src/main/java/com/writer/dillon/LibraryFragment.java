@@ -67,7 +67,7 @@ public class LibraryFragment  extends Fragment  {
         return view;
     }
 
-    public String getDetails(String dir){
+    private String getDetails(String dir){
         EpubReader epubReader = new EpubReader();
         try {
             Book book = epubReader.readEpub(new FileInputStream(dir));

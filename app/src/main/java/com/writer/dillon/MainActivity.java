@@ -2,7 +2,6 @@ package com.writer.dillon;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_settings:
-                                Intent i = new Intent(context, Settings.class);
+                                Intent i = new Intent(context, UserSettings.class);
                                 startActivity(i);
                                 break;
 
