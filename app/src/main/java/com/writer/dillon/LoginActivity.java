@@ -7,12 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -66,7 +67,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         context = getApplicationContext();
 
         setContentView(R.layout.activity_login);
-
+        Backendless.setUrl( "https://api.backendless.com" );
         pref = getApplicationContext().getSharedPreferences("login", 0);
         currentUser=Backendless.UserService.CurrentUser();
 
@@ -74,7 +75,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
             login(pref.getString("email", null), pref.getString("password", null));
         }
 
-        Backendless.setUrl( "http://api.backendless.com" );
+
         Backendless.initApp(this, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
         if (Backendless.UserService.CurrentUser() != null) {
             Intent i = new Intent(context, MainActivity.class);
