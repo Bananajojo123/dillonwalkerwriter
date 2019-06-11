@@ -1,21 +1,15 @@
 package com.writer.dillon;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
-import nl.siegmann.epublib.domain.Resource;
 
 public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHolder> {
 
@@ -66,7 +60,4 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.ViewHold
         }
 
 
-    }
-
-
-}
+    }}

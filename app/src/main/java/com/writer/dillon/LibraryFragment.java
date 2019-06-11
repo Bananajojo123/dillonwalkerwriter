@@ -31,7 +31,7 @@ import nl.siegmann.epublib.epub.EpubReader;
  */
 public class LibraryFragment  extends Fragment  {
     private String TAG = this.getClass().getSimpleName();
-    private String root = Environment.getExternalStorageDirectory().toString();
+    private String root;
     private RecyclerView recyclerView;
 
     Context context;
@@ -45,9 +45,9 @@ public class LibraryFragment  extends Fragment  {
                              Bundle savedInstanceState)  {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_library, container, false);
-        final ArrayList <Item> itemList = new ArrayList<Item>();
+        final ArrayList <Item> itemList = new ArrayList<>();
 
-
+        root = Environment.getExternalStorageDirectory().toString();
         final LibraryAdapter itemArrayAdapter = new LibraryAdapter(R.layout.library_layout, itemList);
         recyclerView = view.findViewById(R.id.recyclerViewLibrary);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -62,6 +62,7 @@ public class LibraryFragment  extends Fragment  {
 
         FileFilter fileFilter = new FileFilter();
         File[] files = fileFilter.finder(root);
+
 
         if(files != null) {
 
