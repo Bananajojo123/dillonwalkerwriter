@@ -18,6 +18,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Switch
+        android:id="@+id/auto_login_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/auto_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notification_switch" />
+
     <Button
         android:id="@+id/reset_pass"
         android:layout_width="wrap_content"
@@ -28,7 +40,7 @@
         android:text="@string/reset_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_switch" />
+        app:layout_constraintTop_toBottomOf="@+id/auto_login_switch" />
 
     <Button
         android:id="@+id/button_logout"
@@ -39,9 +51,8 @@
         android:layout_marginEnd="8dp"
         android:text="@string/logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/report_problem" />
+        app:layout_constraintTop_toBottomOf="@+id/button_delete_account" />
 
     <Button
         android:id="@+id/report_problem"
@@ -53,7 +64,7 @@
         android:text="@string/report_problem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_delete_account" />
+        app:layout_constraintTop_toBottomOf="@+id/reset_pass" />
 
     <Button
         android:id="@+id/button_delete_account"
@@ -65,7 +76,7 @@
         android:text="@string/delete_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reset_pass" />
+        app:layout_constraintTop_toBottomOf="@+id/report_problem" />
 
     <EditText
         android:id="@+id/report_email"
@@ -110,18 +121,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="gone" />
-
-    <Button
-        android:id="@+id/launch_book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="BOOK"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_logout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

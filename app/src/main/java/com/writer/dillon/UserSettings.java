@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +12,14 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.push.DeviceRegistrationResult;
-import com.folioreader.FolioReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +38,13 @@ public class UserSettings extends AppCompatActivity {
     Button reportProblemSubmit;
     Button reportProblemShow;
     Boolean hidden = true;
+
+    // Auto login
     SharedPreferences pref; // 0 - for private mode
+    SharedPreferences.Editor editor;
+    Switch autologin;
+
     // Book testing
-    Button book_launch;
     BackendlessUser user;
     private String TAG = this.getClass().getSimpleName();
     @Override
@@ -49,9 +53,10 @@ public class UserSettings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         pref = getApplicationContext().getSharedPreferences("login", 0);
+        editor = pref.edit();
+
 
         final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-        book_launch = findViewById(R.id.launch_book);
         context = getApplicationContext();
         switchNotification = findViewById(R.id.notification_switch);
         logout = findViewById(R.id.button_logout);
@@ -59,12 +64,8 @@ public class UserSettings extends AppCompatActivity {
         delaccount = findViewById(R.id.button_delete_account);
         Boolean notificationsEnabled = (Boolean) currentUser.getProperty("notifications");
         //Backendless.initApp(context, getString(R.string.backendless_app_id), getString(R.string.backendless_android_api_key));
-        if(notificationsEnabled){
-            switchNotification.setChecked(true);
-        }
-        else {
-            switchNotification.setChecked(false);
-        }
+
+        switchNotification.setChecked(notificationsEnabled);
 
         // Report Problems
         reportProblemEmail = findViewById(R.id.report_email);
@@ -85,6 +86,9 @@ public class UserSettings extends AppCompatActivity {
 
         });
 
+        // Auto Login
+        autologin = findViewById(R.id.auto_login_switch);
+        autologin.setChecked((pref.getBoolean("enabled", true)));
 
         resetPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +97,6 @@ public class UserSettings extends AppCompatActivity {
                 String id = currentUser.getEmail();
                 Boolean signingoogle = (Boolean) currentUser.getProperty("googlesignin");
                 if(!signingoogle) {
-
                     Backendless.UserService.restorePassword(id, new AsyncCallback<Void>() {
                         public void handleResponse(Void response) {
                             Toast.makeText(view.getContext(), "Email Sent!", Toast.LENGTH_LONG).show();
@@ -115,6 +118,24 @@ public class UserSettings extends AppCompatActivity {
             }
         });
 
+        autologin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pref.getBoolean("enabled", false)){
+                    editor.putBoolean("enabled", false);
+                    editor.apply();
+                    autologin.setChecked(false);
+                    Toast.makeText(getApplicationContext(), getString(R.string.auto_login_disabled), Toast.LENGTH_SHORT).show();
+               }
+                else{
+                    editor.putBoolean("enabled", true);
+                    editor.apply();
+                    autologin.setChecked(true);
+                    Toast.makeText(getApplicationContext(), getString(R.string.auto_login_enabled), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +143,9 @@ public class UserSettings extends AppCompatActivity {
                 Backendless.UserService.logout(new AsyncCallback<Void>() {
                     @Override
                     public void handleResponse(Void response) {
+                        editor.putBoolean("enabled", true);
+                        editor.putString("email", null);
+                        editor.putString("password", null);
                         Toast.makeText( context, getString(R.string.logged_out),
                                 Toast.LENGTH_LONG).show();
                         Intent i = new Intent(context, LoginActivity.class);
@@ -144,7 +168,7 @@ public class UserSettings extends AppCompatActivity {
             public void onClick(View view) {
                 List<String> channels = new ArrayList<String>();
                 channels.add( "default" );
-                if(!switchNotification.isChecked()){
+                if((Boolean) currentUser.getProperty("notifications")){
                     Backendless.Messaging.unregisterDevice();
                     Toast.makeText( context, "Notifications Off!",
                                 Toast.LENGTH_SHORT).show();
@@ -201,14 +225,6 @@ public class UserSettings extends AppCompatActivity {
             }
         });
 
-
-        book_launch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FolioReader folioReader = FolioReader.get();
-                folioReader.openBook(R.raw.suns);
-            }
-        });
     }
 
 

@@ -71,7 +71,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         pref = getApplicationContext().getSharedPreferences("login", 0);
         currentUser=Backendless.UserService.CurrentUser();
 
-        if(pref.getString("email", null) != null && pref.getString("password", null) != null && pref.getBoolean("enabled", true)){
+        if(pref.getBoolean("enabled", false)){
             login(pref.getString("email", null), pref.getString("password", null));
         }
 
@@ -132,6 +132,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
     private class SignUpOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View V){
+            signingInWithGoogle = true;
             signUp(email.getText().toString(), uname.getText().toString(),upassword.getText().toString(),upasswordConfirm.getText().toString(), "");
         }
     }
@@ -312,6 +313,10 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                 currentUser=Backendless.UserService.CurrentUser();
                 editor.putString("email", currentUser.getEmail());
                 editor.putString("password", password);
+
+                if(pref.getBoolean("enabled", false)) {
+                    editor.putBoolean("enabled", true);
+                }
                 editor.apply();
 
 
