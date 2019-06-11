@@ -24,7 +24,7 @@ import com.folioreader.FolioReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings extends AppCompatActivity {
+public class UserSettings extends AppCompatActivity {
     Context context;
     Switch switchNotification;
     Button resetPass;
@@ -103,7 +103,7 @@ public class Settings extends AppCompatActivity {
 
                         public void handleFault(BackendlessFault fault) {
 
-                            Log.i("Settings", fault.toString());
+                            Log.i("UserSettings", fault.toString());
                             Toast.makeText(view.getContext(), getString(R.string.backendless_error) + " Error: " + fault.toString(), Toast.LENGTH_LONG).show();
                         }
                     });

@@ -235,7 +235,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
                 user.setProperty("googlesignin", true);
             }
             else{
-                user.setProperty("googlesignin",false);
+                user.setProperty("googlesignin", false);
             }
 
 
