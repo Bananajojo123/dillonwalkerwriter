@@ -42,7 +42,7 @@ import java.io.FilenameFilter;
  */
 public class LibraryFragment  extends Fragment  {
     private String TAG = this.getClass().getSimpleName();
-    String root = Environment.getExternalStorageDirectory().toString();
+    private String root = Environment.getExternalStorageDirectory().toString();
 
     public LibraryFragment() {
         // Required empty public constructor
