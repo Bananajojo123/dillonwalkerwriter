@@ -67,7 +67,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.OnConnect
         context = getApplicationContext();
 
         setContentView(R.layout.activity_login);
-        Backendless.setUrl( "https://api.backendless.com" );
+        Backendless.setUrl( "http://api.backendless.com" );
         pref = getApplicationContext().getSharedPreferences("login", 0);
         currentUser=Backendless.UserService.CurrentUser();
 
